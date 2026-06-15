@@ -50,7 +50,7 @@
 // ===================== ENCRYPTION =====================
 // AES-CBC encryption with a fixed key. The gender value is packed with
 // random padding so every QR code looks different even for the same gender.
-const SECRET_KEY = 'GenderReveal2026!SecretKeyXY32B'; // 32 chars = 256 bit
+const SECRET_KEY = 'GenderReveal2026!SecretKeyXY32B!'; // 32 chars = 256 bit
 
 async function getKey() {
     const enc = new TextEncoder();
@@ -78,7 +78,6 @@ async function encryptGender(gender) {
 // ===================== QR CODE GENERATOR (minimal) =====================
 // Inline QR code generator — no external dependencies
 // Based on QR Code generator library (MIT), minified for embedding
-${''/* We'll use a small inline QR lib */}
 
 // Minimal QR Code generator
 const QRCode = (function() {

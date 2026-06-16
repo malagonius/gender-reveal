@@ -2,7 +2,7 @@
 <html lang="it" data-i18n-title="page.title.choose">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0, viewport-fit=cover">
     <title>⚙️ Scegli il Genere</title>
     <style>
         *{margin:0;padding:0;box-sizing:border-box}
@@ -98,6 +98,7 @@
     </div>
     <p class="qr-info" data-i18n-html="qr.info">Scansiona il QR code.<br>Il gioco partirà automaticamente! 🚀</p>
     <button class="reset-btn" onclick="resetChoice()" data-i18n="qr.reset">🔄 Cambia scelta</button>
+    <button class="gbtn bb" id="play-now-btn" onclick="playNow()" style="margin-top:18px;font-size:1.1em">🚀 Gioca ora su questo telefono</button>
 </div>
 
 <script>
@@ -571,10 +572,18 @@ async function chooseGender(gender) {
         document.getElementById('qr-link-text').textContent = url;
         linkBox.style.display = 'flex';
         linkBox._url = url;
+        // Store local URL for Play Now button (uses token + names without BASE_URL)
+        const localUrl = 'index.html?s=' + token + '&mom=' + encodeURIComponent(momName) + '&dad=' + encodeURIComponent(dadName);
+        document.getElementById('play-now-btn')._localUrl = localUrl;
     } catch (e) {
         alert('Errore nella generazione del QR code: ' + e.message);
         console.error(e);
     }
+}
+
+function playNow() {
+    const btn = document.getElementById('play-now-btn');
+    if (btn._localUrl) window.location.href = btn._localUrl;
 }
 
 function resetChoice() {

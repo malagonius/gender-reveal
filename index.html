@@ -2,7 +2,7 @@
 <html lang="it" data-i18n-title="page.title.game">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0, viewport-fit=cover">
     <title>🎉 Gender Reveal Game</title>
     <style>
         *{margin:0;padding:0;box-sizing:border-box}
@@ -100,7 +100,8 @@ function selectLang(lang) {
     const params = new URLSearchParams(window.location.search);
     const token = params.get('s');
     if (!token) {
-        document.getElementById('error-screen').style.display = 'flex';
+        // Se aperta senza token (es. avvio dall'app), vai alla schermata di scelta genere
+        window.location.replace('chosee_gender.html');
         return;
     }
     // Read parent names (plain URL params)

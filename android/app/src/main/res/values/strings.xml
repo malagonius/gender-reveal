@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Gender Reveal</string>
+    <string name="title_activity_main">Gender Reveal</string>
+    <string name="package_name">com.genderreveal.app</string>
+    <string name="custom_url_scheme">com.genderreveal.app</string>
+</resources>

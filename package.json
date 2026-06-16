@@ -1,0 +1,32 @@
+{
+  "name": "gender-reveal",
+  "version": "1.0.0",
+  "description": "��#\u0000 \u0000g\u0000e\u0000n\u0000d\u0000e\u0000r\u0000-\u0000r\u0000e\u0000v\u0000e\u0000a\u0000l\u0000\r\u0000 \u0000",
+  "main": "index.js",
+  "scripts": {
+    "build": "node -e \"const fs=require('fs'); fs.mkdirSync('www/i18n',{recursive:true}); ['index.html','chosee_gender.html'].forEach(f=>fs.copyFileSync(f,'www/'+f)); fs.copyFileSync('i18n/translations.js','www/i18n/translations.js'); console.log('www/ updated');\"",
+    "sync": "npm run build && npx cap sync",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/malagonius/gender-reveal.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/malagonius/gender-reveal/issues"
+  },
+  "homepage": "https://github.com/malagonius/gender-reveal#readme",
+  "dependencies": {
+    "@capacitor/android": "^8.4.0",
+    "@capacitor/cli": "^8.4.0",
+    "@capacitor/core": "^8.4.0",
+    "@capacitor/ios": "^8.4.0"
+  },
+  "devDependencies": {
+    "typescript": "^6.0.3"
+  }
+}

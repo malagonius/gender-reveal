@@ -52,6 +52,8 @@
     <div id="buttons">
         <button class="gbtn bb" onclick="chooseGender('boy')" data-i18n="choose.btn.boy">👦 Maschietto</button>
         <button class="gbtn bg" onclick="chooseGender('girl')" data-i18n="choose.btn.girl">👧 Femminuccia</button>
+
+        <!-- <button class="lang-btn" onclick="selectLang(t)" data-i18n="lang.btn.en">🇬🇧 English</button> -->
     </div>
     <p class="warn" data-i18n="choose.warn">Una volta scelto il genere verrà creato un QR code!</p>
 </div>
@@ -547,15 +549,6 @@ function selectLang(lang) {
     document.getElementById('lang-screen').style.display = 'none';
     document.getElementById('choose-section').style.display = '';
 }
-
-// If a language was already stored, skip the selector
-(function initLang() {
-    if (_lang) {
-        applyTranslations();
-        document.getElementById('lang-screen').style.display = 'none';
-        document.getElementById('choose-section').style.display = '';
-    }
-})();
 </script>
 </body>
 </html>

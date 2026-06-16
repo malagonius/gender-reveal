@@ -24,6 +24,14 @@
         .reset-btn{font-size:1em;padding:12px 30px;border:none;border-radius:50px;cursor:pointer;font-family:inherit;font-weight:bold;background:rgba(255,255,255,.2);color:#fff;margin-top:15px;transition:transform .2s}
         .reset-btn:hover{transform:scale(1.05);background:rgba(255,255,255,.3)}
         .chosen-label{font-size:1.3em;margin:10px 0;font-weight:bold}
+        /* Name input fields */
+        #name-inputs{width:100%;max-width:320px;margin:12px auto 20px}
+        .names-title{font-size:1em;opacity:.85;margin-bottom:12px}
+        .name-field{margin:8px 0;text-align:left}
+        .name-field label{display:block;font-size:.9em;opacity:.75;margin-bottom:5px;padding-left:14px}
+        .name-field input{width:100%;padding:12px 18px;border:none;border-radius:50px;font-size:1.05em;font-family:inherit;background:rgba(255,255,255,.22);color:#fff;outline:none;box-shadow:0 2px 10px rgba(0,0,0,.2);transition:background .2s,box-shadow .2s}
+        .name-field input::placeholder{opacity:.55;color:#fff}
+        .name-field input:focus{background:rgba(255,255,255,.35);box-shadow:0 3px 14px rgba(0,0,0,.3)}
         /* Language selector */
         #lang-screen{display:flex;flex-direction:column;align-items:center;animation:fadeIn .4s ease}
         #lang-screen h1{font-size:2.5em;margin-bottom:10px;text-shadow:2px 2px 4px rgba(0,0,0,.3)}
@@ -49,6 +57,24 @@
 <div id="choose-section" style="display:none">
     <h1 data-i18n="choose.title">⚙️ Gender Reveal</h1>
     <p class="subtitle" data-i18n="choose.subtitle">⚠️ Quale sarà il sesso del bimbo? ⚠️</p>
+
+    <!-- Parent names -->
+    <div id="name-inputs">
+        <p class="names-title" data-i18n="choose.names.title">👶 Chi sta aspettando il bimbo?</p>
+        <div class="name-field">
+            <label for="mom-name" data-i18n="choose.mom.label">Nome della mamma 👩</label>
+            <input type="text" id="mom-name" maxlength="30"
+                   data-i18n-placeholder="choose.mom.label"
+                   placeholder="Nome della mamma 👩">
+        </div>
+        <div class="name-field">
+            <label for="dad-name" data-i18n="choose.dad.label">Nome del papà 👨</label>
+            <input type="text" id="dad-name" maxlength="30"
+                   data-i18n-placeholder="choose.dad.label"
+                   placeholder="Nome del papà 👨">
+        </div>
+    </div>
+
     <div id="buttons">
         <button class="gbtn bb" onclick="chooseGender('boy')" data-i18n="choose.btn.boy">👦 Maschietto</button>
         <button class="gbtn bg" onclick="chooseGender('girl')" data-i18n="choose.btn.girl">👧 Femminuccia</button>
@@ -514,8 +540,10 @@ const BASE_URL = 'https://malagonius.github.io/gender-reveal/index.html';
 
 async function chooseGender(gender) {
     try {
+        const momName = document.getElementById('mom-name').value.trim() || '?';
+        const dadName = document.getElementById('dad-name').value.trim() || '?';
         const token = await encryptGender(gender);
-        const url = BASE_URL + '?s=' + token;
+        const url = BASE_URL + '?s=' + token + '&mom=' + encodeURIComponent(momName) + '&dad=' + encodeURIComponent(dadName);
 
         // Show QR section
         document.getElementById('choose-section').style.display = 'none';

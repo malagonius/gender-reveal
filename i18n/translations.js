@@ -16,6 +16,9 @@ const TRANSLATIONS = {
     // chosee_gender.html — choose section
     'choose.title':           '⚙️ Gender Reveal',
     'choose.subtitle':        '⚠️ Quale sarà il sesso del bimbo? ⚠️',
+    'choose.names.title':     '👶 Chi sta aspettando il bimbo?',
+    'choose.mom.label':       'Nome della mamma 👩',
+    'choose.dad.label':       'Nome del papà 👨',
     'choose.btn.boy':         '👦 Maschietto',
     'choose.btn.girl':        '👧 Femminuccia',
     'choose.warn':            'Una volta scelto il genere verrà creato un QR code!',
@@ -33,7 +36,8 @@ const TRANSLATIONS = {
 
     // index.html — ready screen
     'ready.title':            '📱 Pronti?',
-    'ready.msg':              'premi Inizia per cominciare!',
+    'ready.welcome':          '💌 Un saluto da {mom} e {dad}!',
+    'ready.msg':              'Premi Inizia per cominciare!',
     'ready.btn':              '🚀 Inizia!',
 
     // Phase 1 — Maze (sperm race)
@@ -122,6 +126,9 @@ const TRANSLATIONS = {
     // chosee_gender.html — choose section
     'choose.title':           '⚙️ Gender Reveal',
     'choose.subtitle':        "⚠️ What will the baby's gender be? ⚠️",
+    'choose.names.title':     '👶 Who is waiting for the baby?',
+    'choose.mom.label':       "Mom's name 👩",
+    'choose.dad.label':       "Dad's name 👨",
     'choose.btn.boy':         '👦 Boy',
     'choose.btn.girl':        '👧 Girl',
     'choose.warn':            'Once the gender is chosen, a QR code will be created!',
@@ -139,6 +146,7 @@ const TRANSLATIONS = {
 
     // index.html — ready screen
     'ready.title':            '📱 Ready?',
+    'ready.welcome':          '💌 A greeting from {mom} & {dad}!',
     'ready.msg':              'Press Start to begin!',
     'ready.btn':              '🚀 Start!',
 

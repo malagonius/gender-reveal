@@ -43,13 +43,16 @@
 </div>
 <div id="ready">
     <h2 data-i18n="ready.title">📱 Pronti?</h2>
-    <p data-i18n="ready.msg">Passa il telefono ai futuri genitori e premi Inizia!</p>
+    <p id="ready-welcome" style="font-size:1.3em;font-weight:bold;margin-bottom:8px;opacity:.95"></p>
+    <p data-i18n="ready.msg">Premi Inizia per cominciare!</p>
     <button class="start-btn" onclick="beginGame()" data-i18n="ready.btn">🚀 Inizia!</button>
 </div>
 <canvas id="game"></canvas>
 <script>
 // ===================== CONFIG =====================
 let GENDER = null;
+let MOM_NAME = '';
+let DAD_NAME = '';
 const ENABLE_CHASERS = false; // Germini rossi - imposta true per riabilitarli
 
 // ===================== DECRYPTION =====================
@@ -81,6 +84,13 @@ function selectLang(lang) {
     setLang(lang);
     document.documentElement.lang = lang;
     document.getElementById('lang-screen').classList.remove('show');
+    // Populate welcome message with parent names if provided
+    const welcomeEl = document.getElementById('ready-welcome');
+    if (welcomeEl) {
+        const mom = MOM_NAME || '?';
+        const dad = DAD_NAME || '?';
+        welcomeEl.textContent = T('ready.welcome', { mom, dad });
+    }
     // Show ready screen (decryption already succeeded at this point)
     document.getElementById('ready').classList.add('show');
 }
@@ -93,6 +103,9 @@ function selectLang(lang) {
         document.getElementById('error-screen').style.display = 'flex';
         return;
     }
+    // Read parent names (plain URL params)
+    MOM_NAME = params.get('mom') ? decodeURIComponent(params.get('mom')) : '';
+    DAD_NAME = params.get('dad') ? decodeURIComponent(params.get('dad')) : '';
     try {
         GENDER = await decryptGender(token);
         // Show the language selector first
@@ -994,7 +1007,6 @@ function drawText(text, x, y, size, color = '#fff', outline = true) {
     ctx.fillText(text, x, y);
     ctx.restore();
 }
-
 // ===================== PHASE 1: SPERM RACE =====================
 function initPhase1() {
     gameSeed = Math.floor(Date.now() / 1000);
@@ -2715,6 +2727,33 @@ function drawPhase3() {
         ctx.fillText('🥹', dadX - 10 * parentScale, parentBaseY - 95 * parentScale + Math.sin(time * 3 + 1) * 4);
         ctx.fillText('❤️', momX - 20 * parentScale, parentBaseY - 90 * parentScale + Math.sin(time * 3 + 2) * 5);
         ctx.fillText('🥹', momX + 10 * parentScale, parentBaseY - 95 * parentScale + Math.sin(time * 3 + 3) * 4);
+        ctx.restore();
+    }
+
+    // Draw parent names above their heads
+    if (MOM_NAME || DAD_NAME) {
+        const nameFontSize = Math.max(12, Math.min(18, W / 28)) * parentScale;
+        ctx.save();
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'bottom';
+        ctx.font = `bold ${nameFontSize}px 'Segoe UI', 'Comic Sans MS', cursive, sans-serif`;
+        // Dad name (left side)
+        if (DAD_NAME) {
+            const dadNameY = parentBaseY - joyBounce - 68 * parentScale;
+            ctx.shadowColor = 'rgba(0,0,0,0.7)';
+            ctx.shadowBlur = 6;
+            ctx.fillStyle = '#fff';
+            ctx.fillText(DAD_NAME, dadX, dadNameY);
+        }
+        // Mom name (right side)
+        if (MOM_NAME) {
+            const momNameY = parentBaseY - joyBounce2 - 68 * parentScale;
+            ctx.shadowColor = 'rgba(0,0,0,0.7)';
+            ctx.shadowBlur = 6;
+            ctx.fillStyle = '#fff';
+            ctx.fillText(MOM_NAME, momX, momNameY);
+        }
+        ctx.shadowBlur = 0;
         ctx.restore();
     }
 

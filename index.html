@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="it" data-i18n-title="page.title.game">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
@@ -16,17 +16,35 @@
         #ready p{font-size:1.1em;margin-bottom:30px;opacity:.8;max-width:350px}
         .start-btn{font-size:1.6em;padding:20px 60px;border:none;border-radius:50px;cursor:pointer;font-family:inherit;font-weight:bold;background:linear-gradient(135deg,#00b894,#00cec9);color:#fff;box-shadow:0 4px 15px rgba(0,0,0,.3);animation:pulse 1.5s infinite}
         @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+        /* Language selector */
+        #lang-screen{position:fixed;top:0;left:0;right:0;bottom:0;background:linear-gradient(135deg,#2d3436 0%,#1a1a2e 100%);display:none;flex-direction:column;justify-content:center;align-items:center;z-index:95;color:#fff;padding:20px;text-align:center}
+        #lang-screen.show{display:flex}
+        #lang-screen h2{font-size:2em;margin-bottom:10px}
+        #lang-screen p{font-size:1.1em;opacity:.8;margin-bottom:30px}
+        .lang-btns{display:flex;flex-wrap:wrap;justify-content:center;gap:16px}
+        .lang-btn{font-size:1.3em;padding:16px 40px;border:none;border-radius:50px;cursor:pointer;font-family:inherit;font-weight:bold;background:rgba(255,255,255,.15);color:#fff;box-shadow:0 4px 15px rgba(0,0,0,.3);transition:transform .2s,box-shadow .2s}
+        .lang-btn:hover,.lang-btn:active{transform:scale(1.07);background:rgba(255,255,255,.28);box-shadow:0 6px 20px rgba(0,0,0,.4)}
     </style>
+    <script src="i18n/translations.js"></script>
 </head>
 <body>
 <div id="error-screen" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:linear-gradient(135deg,#e74c3c 0%,#c0392b 100%);flex-direction:column;justify-content:center;align-items:center;z-index:200;color:#fff;padding:20px;text-align:center">
-    <h1>❌ Link non valido</h1>
-    <p style="font-size:1.2em;margin-top:15px;opacity:.9">Questo link non contiene un codice valido.<br>Chiedi a chi ha generato il QR di rifarlo!</p>
+    <h1 data-i18n="error.title">❌ Link non valido</h1>
+    <p style="font-size:1.2em;margin-top:15px;opacity:.9" data-i18n-html="error.msg">Questo link non contiene un codice valido.<br>Chiedi a chi ha generato il QR di rifarlo!</p>
+</div>
+<!-- Language selector (shown after successful decryption, before ready screen) -->
+<div id="lang-screen">
+    <h2 data-i18n="lang.title">🌍 Benvenuto!</h2>
+    <p data-i18n="lang.subtitle">Scegli la lingua / Choose your language</p>
+    <div class="lang-btns">
+        <button class="lang-btn" onclick="selectLang('it')" data-i18n="lang.btn.it">🇮🇹 Italiano</button>
+        <button class="lang-btn" onclick="selectLang('en')" data-i18n="lang.btn.en">🇬🇧 English</button>
+    </div>
 </div>
 <div id="ready">
-    <h2>📱 Pronti?</h2>
-    <p>Passa il telefono ai futuri genitori e premi Inizia!</p>
-    <button class="start-btn" onclick="beginGame()">🚀 Inizia!</button>
+    <h2 data-i18n="ready.title">📱 Pronti?</h2>
+    <p data-i18n="ready.msg">Passa il telefono ai futuri genitori e premi Inizia!</p>
+    <button class="start-btn" onclick="beginGame()" data-i18n="ready.btn">🚀 Inizia!</button>
 </div>
 <canvas id="game"></canvas>
 <script>
@@ -58,6 +76,15 @@ async function decryptGender(token) {
     return obj.g;
 }
 
+// ===================== LANGUAGE SELECTOR =====================
+function selectLang(lang) {
+    setLang(lang);
+    document.documentElement.lang = lang;
+    document.getElementById('lang-screen').classList.remove('show');
+    // Show ready screen (decryption already succeeded at this point)
+    document.getElementById('ready').classList.add('show');
+}
+
 // ===================== INIT FROM URL =====================
 (async function() {
     const params = new URLSearchParams(window.location.search);
@@ -68,8 +95,14 @@ async function decryptGender(token) {
     }
     try {
         GENDER = await decryptGender(token);
-        // Show ready screen directly
-        document.getElementById('ready').classList.add('show');
+        // If a language is already stored, skip the selector and go straight to ready
+        if (_lang) {
+            applyTranslations();
+            document.getElementById('ready').classList.add('show');
+        } else {
+            // Show the language selector first
+            document.getElementById('lang-screen').classList.add('show');
+        }
     } catch(e) {
         console.error('Decryption failed:', e);
         document.getElementById('error-screen').style.display = 'flex';
@@ -1280,7 +1313,7 @@ function drawPhase1() {
     // UI - hearts (hit counter)
     const hearts = '❤️'.repeat(3 - p1.hitCount) + '🖤'.repeat(p1.hitCount);
     drawText(hearts, W / 2, 22, 18, '#fff', false);
-    drawText('🏊 Attraversa il labirinto!', W / 2, H - 22, Math.min(15, W / 28), 'rgba(255,255,255,0.7)', false);
+    drawText(T('phase1.hint'), W / 2, H - 22, Math.min(15, W / 28), 'rgba(255,255,255,0.7)', false);
 
     // Draw joystick (PC only)
     if (!isTouch) {
@@ -1317,21 +1350,21 @@ function drawTrans1() {
     const s = 40 + Math.sin(time * 5) * 5;
     drawEgg(W / 2, H / 2, s, 0, 0);
     const a = clamp(trans1Timer * 2, 0, 1);
-    drawText('💫 L\'ovetto è stato fecondato!', W / 2, H / 2 + 80, Math.min(28, W / 16), `rgba(255,255,255,${a})`);
+    drawText(T('phase1.win'), W / 2, H / 2 + 80, Math.min(28, W / 16), `rgba(255,255,255,${a})`);
 }
 
 // ===================== QUIZ PHASE =====================
 const quiz = {
     questions: [
-        { q: "La mamma ha più voglia di...", a: ["🧂 Salato", "🍰 Dolce"], scores: [1, -1] },
-        { q: "Com'è la pancia della mamma?", a: ["⬇️ Bassa e a punta", "⬆️ Alta e rotonda"], scores: [1, -1] },
-        { q: "La pelle della mamma è...", a: ["✨ Luminosa e bella", "😤 Ha qualche imperfezione"], scores: [-1, 1] },
-        { q: "Il papà ha preso peso?", a: ["🍔 Sì, un po'!", "🏃 No, come prima"], scores: [1, -1] },
-        { q: "I capelli della mamma sono...", a: ["💇 Più folti e lucenti", "🪮 Un po' più sottili"], scores: [-1, 1] },
-        { q: "La mamma preferisce dormire...", a: ["⬅️ Sul fianco sinistro", "➡️ Sul fianco destro"], scores: [1, -1] },
-        { q: "L'umore della mamma è...", a: ["😌 Tranquillo e sereno", "🎢 Un po' altalenante"], scores: [1, -1] },
-        { q: "Quanto è la frequenza cardiaca del tuo bebè?", a: ["💓 Sopra i 140 battiti al minuto", "💗 Sotto i 140 battiti al minuto"], scores: [-1, 1] },
-        { q: "Di che colore è la tua pipì?", a: ["🟡 Giallo opaco", "✨ Giallo brillante"], scores: [-1, 1] }
+        { q: 'quiz.q1', a: ['quiz.q1.a1', 'quiz.q1.a2'], scores: [1, -1] },
+        { q: 'quiz.q2', a: ['quiz.q2.a1', 'quiz.q2.a2'], scores: [1, -1] },
+        { q: 'quiz.q3', a: ['quiz.q3.a1', 'quiz.q3.a2'], scores: [-1, 1] },
+        { q: 'quiz.q4', a: ['quiz.q4.a1', 'quiz.q4.a2'], scores: [1, -1] },
+        { q: 'quiz.q5', a: ['quiz.q5.a1', 'quiz.q5.a2'], scores: [-1, 1] },
+        { q: 'quiz.q6', a: ['quiz.q6.a1', 'quiz.q6.a2'], scores: [1, -1] },
+        { q: 'quiz.q7', a: ['quiz.q7.a1', 'quiz.q7.a2'], scores: [1, -1] },
+        { q: 'quiz.q8', a: ['quiz.q8.a1', 'quiz.q8.a2'], scores: [-1, 1] },
+        { q: 'quiz.q9', a: ['quiz.q9.a1', 'quiz.q9.a2'], scores: [-1, 1] }
     ],
     currentQ: 0,
     score: 0,
@@ -1412,9 +1445,9 @@ function drawQuizIntro() {
     ctx.fillText('🔮', W / 2, H / 2 - 70);
     ctx.restore();
 
-    drawText('Fase Questionario', W / 2, H / 2 + 10, Math.min(30, W / 14), `rgba(255,234,167,${a})`);
-    drawText('Rispondi alle domande e scopri', W / 2, H / 2 + 55, Math.min(16, W / 26), `rgba(255,255,255,${a * 0.8})`, false);
-    drawText('cosa predicono per il tuo bebè!', W / 2, H / 2 + 80, Math.min(16, W / 26), `rgba(255,255,255,${a * 0.8})`, false);
+    drawText(T('quiz.intro.title'), W / 2, H / 2 + 10, Math.min(30, W / 14), `rgba(255,234,167,${a})`);
+    drawText(T('quiz.intro.sub1'), W / 2, H / 2 + 55, Math.min(16, W / 26), `rgba(255,255,255,${a * 0.8})`, false);
+    drawText(T('quiz.intro.sub2'), W / 2, H / 2 + 80, Math.min(16, W / 26), `rgba(255,255,255,${a * 0.8})`, false);
 
     quiz.introTimer -= dt;
     if (quiz.introTimer <= 0) {
@@ -1453,10 +1486,10 @@ function drawQuiz() {
     }
 
     // Question number
-    drawText(`Domanda ${quiz.currentQ + 1} di ${quiz.questions.length}`, W / 2, H * 0.2, Math.min(16, W / 26), 'rgba(255,255,255,0.6)', false);
+    drawText(T('quiz.progress', { current: quiz.currentQ + 1, total: quiz.questions.length }), W / 2, H * 0.2, Math.min(16, W / 26), 'rgba(255,255,255,0.6)', false);
 
     // Question text
-    drawText(q.q, W / 2, H * 0.32, Math.min(24, W / 18), '#ffeaa7');
+    drawText(T(q.q), W / 2, H * 0.32, Math.min(24, W / 18), '#ffeaa7');
 
     // Answer buttons
     for (let i = 0; i < 2; i++) {
@@ -1483,12 +1516,12 @@ function drawQuiz() {
         ctx.restore();
 
         const textCol = selected ? '#ffeaa7' : '#fff';
-        drawText(q.a[i], W / 2, r.y + r.h / 2, Math.min(20, W / 22), textCol, false);
+        drawText(T(q.a[i]), W / 2, r.y + r.h / 2, Math.min(20, W / 22), textCol, false);
     }
 
     // Instruction
     if (!quiz.answered) {
-        drawText('👆 Tocca per rispondere', W / 2, H - 40, Math.min(14, W / 30), 'rgba(255,255,255,0.4)', false);
+        drawText(T('quiz.tap'), W / 2, H - 40, Math.min(14, W / 30), 'rgba(255,255,255,0.4)', false);
     }
 }
 
@@ -1526,7 +1559,7 @@ function drawQuizResult() {
         ctx.fillText('🔮', W / 2, H / 2 - 50);
         ctx.restore();
 
-        drawText('Secondo le vostre risposte...', W / 2, H / 2 + 20, Math.min(24, W / 18), `rgba(255,234,167,${a})`);
+        drawText(T('quiz.result.title'), W / 2, H / 2 + 20, Math.min(24, W / 18), `rgba(255,234,167,${a})`);
 
         // Dots animation
         const dots = '.'.repeat(Math.floor(t * 2) % 4);
@@ -1537,7 +1570,7 @@ function drawQuizResult() {
         const revealA = clamp(revealT * 2, 0, 1);
         const gCol = isBoy ? '#74b9ff' : '#fd79a8';
         const emoji = isBoy ? '👦' : '👧';
-        const text = isBoy ? 'Potrebbe essere un MASCHIETTO!' : 'Potrebbe essere una FEMMINUCCIA!';
+        const text = isBoy ? T('quiz.result.boy') : T('quiz.result.girl');
 
         // Flash at reveal
         if (revealT < 0.3) {
@@ -1561,7 +1594,7 @@ function drawQuizResult() {
         // Prediction text
         const rgb = isBoy ? '116,185,255' : '253,121,168';
         drawText(text, W / 2, H / 2 + 10, Math.min(26, W / 16), `rgba(${rgb},${revealA})`);
-        drawText('⚠️ Ma è solo un\'ipotesi!', W / 2, H / 2 + 50, Math.min(16, W / 26), `rgba(255,255,255,${revealA * 0.6})`, false);
+        drawText(T('quiz.result.disclaimer'), W / 2, H / 2 + 50, Math.min(16, W / 26), `rgba(255,255,255,${revealA * 0.6})`, false);
 
         // Sparkle particles
         if (Math.random() < 0.12) {
@@ -1571,7 +1604,7 @@ function drawQuizResult() {
         // Tocca per continuare after 4s
         if (t > 4) {
             const blinkA = 0.5 + Math.sin(time * 4) * 0.3;
-            drawText('👆 Tocca per continuare', W / 2, H - 50, Math.min(18, W / 24), `rgba(255,255,255,${blinkA})`, false);
+            drawText(T('quiz.tap.continue'), W / 2, H - 50, Math.min(18, W / 24), `rgba(255,255,255,${blinkA})`, false);
         }
     }
 }
@@ -1802,7 +1835,7 @@ function drawPhase2() {
 
     // Instructions text
     const infoY = H - 35;
-    drawText('🤚 Accarezza  |  👆 Prendi cibo  |  👊 Colpisci virus', W / 2, infoY, Math.min(14, W / 30), 'rgba(255,255,255,0.7)', false);
+    drawText(T('phase2.hint'), W / 2, infoY, Math.min(14, W / 30), 'rgba(255,255,255,0.7)', false);
 }
 
 // Phase 2 intro overlay
@@ -1824,8 +1857,8 @@ function drawPhase2Intro() {
     ctx.fillText('🤚', W / 2, H / 2 - 50);
     ctx.restore();
 
-    drawText('Prenditi cura del feto e fallo crescere!', W / 2, H / 2 + 30, Math.min(26, W / 18), `rgba(255,255,255,${a})`);
-    drawText('Accarezzalo, dagli da mangiare\ne proteggilo dai virus!', W / 2, H / 2 + 75, Math.min(16, W / 26), `rgba(255,200,200,${a * 0.8})`, false);
+    drawText(T('phase2.intro.title'), W / 2, H / 2 + 30, Math.min(26, W / 18), `rgba(255,255,255,${a})`);
+    drawText(T('phase2.intro.sub'), W / 2, H / 2 + 75, Math.min(16, W / 26), `rgba(255,200,200,${a * 0.8})`, false);
 
     p2.introTimer -= dt;
     if (p2.introTimer <= 0) {
@@ -2437,7 +2470,7 @@ function drawTrans2() {
     // Stork flying in
     drawStork(trans2StorkX, trans2StorkY, 1.3, time * 6, true);
     const a = clamp(trans2Timer, 0, 1);
-    drawText('La cicogna sta arrivando!', W / 2, H * 0.08, Math.min(28, W / 16), `rgba(255,255,255,${a})`);
+    drawText(T('phase3.stork'), W / 2, H * 0.08, Math.min(28, W / 16), `rgba(255,255,255,${a})`);
 }
 
 // ===================== PHASE 3: REVEAL =====================
@@ -2770,10 +2803,10 @@ function drawPhase3() {
     if (p3.textAlpha > 0) {
         ctx.save();
         ctx.globalAlpha = p3.textAlpha;
-        const txt = GENDER === 'boy' ? 'È un MASCHIETTO!' : 'È una FEMMINUCCIA!';
+        const txt = GENDER === 'boy' ? T('reveal.boy') : T('reveal.girl');
         const col = GENDER === 'boy' ? '#74b9ff' : '#fd79a8';
         drawText(txt, W / 2, H * 0.15, Math.min(40, W / 12), col);
-        drawText('🎉 Congratulazioni! 🎉', W / 2, H * 0.23, Math.min(24, W / 18), '#fff');
+        drawText(T('reveal.congrats'), W / 2, H * 0.23, Math.min(24, W / 18), '#fff');
         ctx.restore();
     }
 }
@@ -2830,9 +2863,9 @@ function loop(ts) {
         case 'phase1intro':
             drawBg('#0c1445', '#1a1a3e');
             const ia = clamp(p1.introTimer, 0, 1);
-            drawText('🏊‍♂️ La Corsa del Vermicello!', W / 2, H / 2 - 20, Math.min(32, W / 14), `rgba(116,185,255,${ia})`);
-            drawText('Attraversa il labirinto fino all\'ovetto!', W / 2, H / 2 + 20, Math.min(18, W / 24), `rgba(255,255,255,${ia * 0.8})`, false);
-            drawText('⚠️ 3 colpi dai virus = si ricomincia!', W / 2, H / 2 + 55, Math.min(15, W / 28), `rgba(255,200,200,${ia * 0.7})`, false);
+            drawText(T('phase1.intro.title'), W / 2, H / 2 - 20, Math.min(32, W / 14), `rgba(116,185,255,${ia})`);
+            drawText(T('phase1.intro.sub'), W / 2, H / 2 + 20, Math.min(18, W / 24), `rgba(255,255,255,${ia * 0.8})`, false);
+            drawText(T('phase1.intro.warn'), W / 2, H / 2 + 55, Math.min(15, W / 28), `rgba(255,200,200,${ia * 0.7})`, false);
             p1.introTimer -= dt;
             if (p1.introTimer <= 0) phase = 'phase1';
             break;

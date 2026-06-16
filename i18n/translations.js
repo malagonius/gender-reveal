@@ -33,7 +33,7 @@ const TRANSLATIONS = {
 
     // index.html — ready screen
     'ready.title':            '📱 Pronti?',
-    'ready.msg':              'Passa il telefono ai futuri genitori e premi Inizia!',
+    'ready.msg':              'premi Inizia per cominciare!',
     'ready.btn':              '🚀 Inizia!',
 
     // Phase 1 — Maze (sperm race)
@@ -88,11 +88,11 @@ const TRANSLATIONS = {
     'quiz.q7.a1': '😌 Tranquillo e sereno',
     'quiz.q7.a2': "🎢 Un po' altalenante",
 
-    'quiz.q8':    'Quanto è la frequenza cardiaca del tuo bebè?',
+    'quiz.q8':    'Quanto è la frequenza cardiaca del bebè?',
     'quiz.q8.a1': '💓 Sopra i 140 battiti al minuto',
     'quiz.q8.a2': '💗 Sotto i 140 battiti al minuto',
 
-    'quiz.q9':    'Di che colore è la tua pipì?',
+    'quiz.q9':    'Di che colore è la pipì della mamma?',
     'quiz.q9.a1': '🟡 Giallo opaco',
     'quiz.q9.a2': '✨ Giallo brillante',
 
@@ -139,7 +139,7 @@ const TRANSLATIONS = {
 
     // index.html — ready screen
     'ready.title':            '📱 Ready?',
-    'ready.msg':              'Hand the phone to the expecting parents and press Start!',
+    'ready.msg':              'Press Start to begin!',
     'ready.btn':              '🚀 Start!',
 
     // Phase 1 — Maze (sperm race)
@@ -194,11 +194,11 @@ const TRANSLATIONS = {
     'quiz.q7.a1': '😌 Calm and peaceful',
     'quiz.q7.a2': '🎢 A bit up and down',
 
-    'quiz.q8':    "What is your baby's heart rate?",
+    'quiz.q8':    "What is the baby's heart rate?",
     'quiz.q8.a1': '💓 Above 140 beats per minute',
     'quiz.q8.a2': '💗 Below 140 beats per minute',
 
-    'quiz.q9':    "What color is your pee?",
+    'quiz.q9':    "What's the color of the mom's pee?",
     'quiz.q9.a1': '🟡 Dull yellow',
     'quiz.q9.a2': '✨ Bright yellow',
 

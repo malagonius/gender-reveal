@@ -23,6 +23,10 @@
         .qr-info{font-size:1em;opacity:.85;max-width:350px;margin-bottom:10px}
         .reset-btn{font-size:1em;padding:12px 30px;border:none;border-radius:50px;cursor:pointer;font-family:inherit;font-weight:bold;background:rgba(255,255,255,.2);color:#fff;margin-top:15px;transition:transform .2s}
         .reset-btn:hover{transform:scale(1.05);background:rgba(255,255,255,.3)}
+        #qr-link-box{display:none;flex-direction:column;align-items:center;gap:10px;width:100%;max-width:360px;margin-top:4px}
+        #qr-link-text{word-break:break-all;font-size:.78em;opacity:.85;background:rgba(0,0,0,.25);border-radius:12px;padding:10px 14px;line-height:1.5;text-align:left;width:100%}
+        .copy-btn{font-size:.95em;padding:10px 26px;border:none;border-radius:50px;cursor:pointer;font-family:inherit;font-weight:bold;background:rgba(255,255,255,.25);color:#fff;transition:transform .2s,background .2s}
+        .copy-btn:hover,.copy-btn:active{transform:scale(1.06);background:rgba(255,255,255,.4)}
         .chosen-label{font-size:1.3em;margin:10px 0;font-weight:bold}
         /* Name input fields */
         #name-inputs{width:100%;max-width:320px;margin:12px auto 20px}
@@ -88,6 +92,10 @@
     <h1 data-i18n="qr.title">🎉 QR Code Pronto!</h1>
     <p class="chosen-label" id="chosen-label"></p>
     <canvas id="qr-canvas"></canvas>
+    <div id="qr-link-box">
+        <span id="qr-link-text"></span>
+        <button class="copy-btn" onclick="copyQrLink()">📋 Copy link</button>
+    </div>
     <p class="qr-info" data-i18n-html="qr.info">Scansiona il QR code.<br>Il gioco partirà automaticamente! 🚀</p>
     <button class="reset-btn" onclick="resetChoice()" data-i18n="qr.reset">🔄 Cambia scelta</button>
 </div>
@@ -557,6 +565,12 @@ async function chooseGender(gender) {
         // Generate QR code
         const canvas = document.getElementById('qr-canvas');
         QRCode.generateToCanvas(canvas, url, 280);
+
+        // Show link
+        const linkBox = document.getElementById('qr-link-box');
+        document.getElementById('qr-link-text').textContent = url;
+        linkBox.style.display = 'flex';
+        linkBox._url = url;
     } catch (e) {
         alert('Errore nella generazione del QR code: ' + e.message);
         console.error(e);
@@ -566,6 +580,29 @@ async function chooseGender(gender) {
 function resetChoice() {
     document.getElementById('choose-section').style.display = '';
     document.getElementById('qr-section').classList.remove('show');
+    document.getElementById('qr-link-box').style.display = 'none';
+}
+
+async function copyQrLink() {
+    const linkBox = document.getElementById('qr-link-box');
+    const url = linkBox._url;
+    if (!url) return;
+    try {
+        await navigator.clipboard.writeText(url);
+        const btn = linkBox.querySelector('.copy-btn');
+        const prev = btn.textContent;
+        btn.textContent = '✅ Copied!';
+        setTimeout(() => { btn.textContent = prev; }, 2000);
+    } catch (e) {
+        // Fallback for browsers that block clipboard API
+        const ta = document.createElement('textarea');
+        ta.value = url;
+        ta.style.position = 'fixed'; ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+    }
 }
 
 // ===================== LANGUAGE SELECTOR =====================

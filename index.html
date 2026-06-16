@@ -2739,7 +2739,7 @@ function drawPhase3() {
         ctx.font = `bold ${nameFontSize}px 'Segoe UI', 'Comic Sans MS', cursive, sans-serif`;
         // Dad name (left side)
         if (DAD_NAME) {
-            const dadNameY = parentBaseY - joyBounce - 68 * parentScale;
+            const dadNameY = parentBaseY - joyBounce - 48 * parentScale;
             ctx.shadowColor = 'rgba(0,0,0,0.7)';
             ctx.shadowBlur = 6;
             ctx.fillStyle = '#fff';
@@ -2747,7 +2747,7 @@ function drawPhase3() {
         }
         // Mom name (right side)
         if (MOM_NAME) {
-            const momNameY = parentBaseY - joyBounce2 - 68 * parentScale;
+            const momNameY = parentBaseY - joyBounce2 - 48 * parentScale;
             ctx.shadowColor = 'rgba(0,0,0,0.7)';
             ctx.shadowBlur = 6;
             ctx.fillStyle = '#fff';

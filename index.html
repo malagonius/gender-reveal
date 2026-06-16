@@ -183,13 +183,10 @@ function beginGame() {
     document.getElementById('ready').style.display = 'none';
     if (isTouch) canvas.style.cursor = 'none';
     else canvas.style.cursor = 'default';
-    // DEBUG: skip to quiz phase for testing
-    initQuiz();
-    phase = 'quizIntro';
-    // initPhase1();
-    // updateJoyPos();
-    // phase = 'phase1intro';
-    // p1.introTimer = 3;
+    initPhase1();
+    updateJoyPos();
+    phase = 'phase1intro';
+    p1.introTimer = 3;
     initBgParticles();
     requestAnimationFrame(loop);
 }
@@ -1389,13 +1386,14 @@ function updateQuiz() {
         taps.length = 0;
         quiz.answerTimer += dt;
         if (quiz.answerTimer > 1.2) {
-            quiz.currentQ++;
-            quiz.answered = false;
-            quiz.selectedAnswer = -1;
-            if (quiz.currentQ >= quiz.questions.length) {
+            if (quiz.currentQ >= quiz.questions.length - 1) {
                 quiz.prediction = quiz.score > 0 ? 'boy' : 'girl';
                 quiz.resultTimer = 0;
                 phase = 'quizResult';
+            } else {
+                quiz.currentQ++;
+                quiz.answered = false;
+                quiz.selectedAnswer = -1;
             }
         }
     }

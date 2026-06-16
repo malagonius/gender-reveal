@@ -1,3 +1,4 @@
+
 # Dependencies
 node_modules/
 
@@ -26,3 +27,4 @@ DerivedData/
 .env.*
 *.log
 dist/
+*.png

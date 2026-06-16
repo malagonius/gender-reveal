@@ -36,7 +36,7 @@ const TRANSLATIONS = {
 
     // index.html — ready screen
     'ready.title':            '📱 Pronti?',
-    'ready.welcome':          '💌 Un saluto da {mom} e {dad}!',
+    'ready.welcome':          '💌 Un saluto da {mom} e {dad}, oggi scopriamo il genere del bebè!',
     'ready.msg':              'Premi Inizia per cominciare!',
     'ready.btn':              '🚀 Inizia!',
 
@@ -146,7 +146,7 @@ const TRANSLATIONS = {
 
     // index.html — ready screen
     'ready.title':            '📱 Ready?',
-    'ready.welcome':          '💌 A greeting from {mom} & {dad}!',
+    'ready.welcome':          '💌 A greeting from {mom} & {dad}, today we will discover the baby\'s gender!',
     'ready.msg':              'Press Start to begin!',
     'ready.btn':              '🚀 Start!',
 

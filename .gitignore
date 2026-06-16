@@ -5,12 +5,8 @@ node_modules/
 # Capacitor web output
 www/
 
-# Android build artifacts
-android/build/
-android/app/build/
-android/capacitor-cordova-android-plugins/build/
-android/.gradle/
-android/local.properties
+# Android
+android/
 
 # iOS build artifacts
 ios/App/App/public/
@@ -28,3 +24,5 @@ DerivedData/
 *.log
 dist/
 *.png
+*.jpeg
+*.jpg

@@ -2730,32 +2730,6 @@ function drawPhase3() {
         ctx.restore();
     }
 
-    // Draw parent names above their heads (well above the celebration emojis)
-    if (MOM_NAME || DAD_NAME) {
-        const nameFontSize = Math.max(14, Math.min(20, W / 24)) * parentScale;
-        const nameY = parentBaseY - 130 * parentScale; // fixed: above emojis at ~90*parentScale
-        ctx.save();
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'bottom';
-        ctx.font = `bold ${nameFontSize}px 'Segoe UI', 'Comic Sans MS', cursive, sans-serif`;
-        // Dad name (left side)
-        if (DAD_NAME) {
-            ctx.shadowColor = 'rgba(0,0,0,0.8)';
-            ctx.shadowBlur = 8;
-            ctx.fillStyle = '#fff';
-            ctx.fillText(DAD_NAME, dadX, nameY);
-        }
-        // Mom name (right side)
-        if (MOM_NAME) {
-            ctx.shadowColor = 'rgba(0,0,0,0.8)';
-            ctx.shadowBlur = 8;
-            ctx.fillStyle = '#fff';
-            ctx.fillText(MOM_NAME, momX, nameY);
-        }
-        ctx.shadowBlur = 0;
-        ctx.restore();
-    }
-
     // Draw gift box on table (while not fully open)
     const pkgSize = Math.min(60, W * 0.12);
     if (p3.stage <= 1 || (p3.stage === 2 && p3.pkgOpenAmt < 1)) {

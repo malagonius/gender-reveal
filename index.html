@@ -95,14 +95,8 @@ function selectLang(lang) {
     }
     try {
         GENDER = await decryptGender(token);
-        // If a language is already stored, skip the selector and go straight to ready
-        if (_lang) {
-            applyTranslations();
-            document.getElementById('ready').classList.add('show');
-        } else {
-            // Show the language selector first
-            document.getElementById('lang-screen').classList.add('show');
-        }
+        // Show the language selector first
+        document.getElementById('lang-screen').classList.add('show');
     } catch(e) {
         console.error('Decryption failed:', e);
         document.getElementById('error-screen').style.display = 'flex';
